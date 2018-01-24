@@ -1,27 +1,12 @@
-# This file enables the Travis continuous integration system, which
-# automatically builds and tests joda-time for each GitHub commit or 
-# pull request on three separate JDKs.
-#
-# For more information, see https://travis-ci.org
-
-sudo: false
 language: java
-jdk:
-  - oraclejdk8
-  - openjdk7
-cache:
-  directories:
-    - "$HOME/.m2/repository"
-before_cache:
-  - rm -rf $HOME/.m2/repository/org/joda/time
-# install
 install:
-  - mvn --version
+- bash install.sh
 script:
-  - mvn install -e -B
+- bash test.sh
+before_script:
+- bash pull.sh
 after_success:
-  - if [[ $TRAVIS_TAG =~ ^v.*$ ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk8" ]; then travis_wait 40 mvn site-deploy -e -B --settings .github/maven-settings.xml; fi
-# secure keys for GITHUB_TOKEN
+- bash push.sh
 env:
   global:
-    secure: UK9A4eHPOP6XkYbST1kpv3gVEZTBqp79eCF0nqpXejbXihY58MNVZ0aGt8IM/ZThO/UoK+AxWjaSLljE2Neo4ehxvRHsRG0bIhAoCBUjP6f6vuMYTZlRNb9W+NM3RjXvrQGnCM3PTckWaFQ6i5Ny4e1GuETSdh96Yk7WNn6DMJM=
+    secure: lMJqUaTnzjotUTIK+xRTAd+T9a56hwCGm6FeDith0P+4fL9ERzEAjGBPBbYly4gGTJT2RAEvqC2UyyE2YWVKNnqawBNe6j3VcpsBqVGeAogA4wYXZYMY4tJ88bLSUWZSdDUYEPDhuCppODGAOiEyJjZLnzJm4+UC25vPMVJYSzuk5XrL8btm45SHoOW3YE4S2UzatxdTkpGIOu8QpUCLOLgmim0agvCkc3JCpGkb8z0vhLTcfMSLgmPtpkWYTKxuaIcUvgSCGNqOUQM6ND+x7L7Ca2PrYvJNtGUIX9nc1dgnlXH4zwcbAhm+sqX0d9Mvc6Ng1a/V2R0d1L/uybBaNgiCQq0eIv89IB0erepd74JPF9BGUkx7MDGv8iNp3KRgGZ1ybnJlet6caChcIAGIheMGygvvhxxvfdsBnyh7Ns7BKjSgpb2yStnlYorwutJW7GrH2CKh+RYdSs4TxJ2MQ6piEkMfdAy0V5IT+ZBtk9xWJVs2FUILfHynImITIKE3eEBatw0k1YZS06Vhf+rG066HEbfBq7Lmfxy+yRu5VjS8qIxIo55lnSmMeh02hDt4xNrrwQ9jYPhGK8l5OTQcD3TFdm2sUaUtVCIUnknz6wfSuLKdWveZCiUbDMY2ZiOx+FX3Af8OsmsxSaVqGy3DVitF/gr4ZjMSDib0TryuAJM=
